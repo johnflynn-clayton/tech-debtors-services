@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>CMH.MobileHomeTracker.Api.Client</name>
+    </assembly>
+    <members>
+        <member name="T:CMH.MobileHomeTracker.Api.Client.IMobileHomeTrackerApiClient">
+            <summary>
+            A sample api client
+            </summary>
+        </member>
+        <member name="M:CMH.MobileHomeTracker.Api.Client.IMobileHomeTrackerApiClient.GetAllAsync">
+            <summary>
+            Get all Records
+            </summary>
+        </member>
+        <member name="M:CMH.MobileHomeTracker.Api.Client.IMobileHomeTrackerApiClient.GetByHomeIdAsync(System.Guid)">
+            <summary>
+            Get a single Record by id
+            </summary>
+        </member>
+        <member name="T:CMH.MobileHomeTracker.Api.Client.SampleApiClientExtensions">
+            <summary>
+            Helper methods for the configuring the api client
+            </summary>
+        </member>
+        <member name="M:CMH.MobileHomeTracker.Api.Client.SampleApiClientExtensions.AddMobileHomeTrackerApiClient(Microsoft.Extensions.DependencyInjection.IServiceCollection,Microsoft.Extensions.Configuration.IConfiguration,System.Collections.Generic.IDictionary{System.String,System.String},Microsoft.Extensions.DependencyInjection.ServiceLifetime)">
+            <summary>
+            Helper to add the HttpClient for the Api with optional headers.
+            </summary>
+        </member>
+        <member name="T:CMH.MobileHomeTracker.Api.Client.MobileHomeTrackerApiClient">
+            <inheriddoc/>
+        </member>
+        <member name="M:CMH.MobileHomeTracker.Api.Client.MobileHomeTrackerApiClient.#ctor(System.Net.Http.IHttpClientFactory)">
+            <summary>
+            This constructor will be used by the extension method to configure the client
+            </summary>
+        </member>
+        <member name="M:CMH.MobileHomeTracker.Api.Client.MobileHomeTrackerApiClient.#ctor(System.Net.Http.HttpClient)">
+            <summary>
+            This constructor should only be used in the context of integration tests
+            </summary>
+        </member>
+        <member name="M:CMH.MobileHomeTracker.Api.Client.MobileHomeTrackerApiClient.CreateClient(System.Net.Http.HttpClient)">
+            <summary>
+            Factory method used to be able to construct the client for testing purposes
+            </summary>
+        </member>
+        <member name="M:CMH.MobileHomeTracker.Api.Client.MobileHomeTrackerApiClient.GetAllAsync">
+            <inheriddoc/>
+        </member>
+    </members>
+</doc>

@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <IsPackable>false</IsPackable>
+    <Platforms>AnyCPU;x64</Platforms>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Cmh.Vmf.Infrastructure.Testing" Version="1.1.5.92" />
+    <PackageReference Include="NUnit3TestAdapter" Version="3.17.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.9.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Api\CMH.Template.Dto\CMH.MobileHomeTracker.Dto.csproj" />
+    <ProjectReference Include="..\..\Core\CMH.Template.Domain\CMH.MobileHomeTracker.Domain.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\CMH.Template.Data\CMH.MobileHomeTracker.Data.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\CMH.Template.Infrastructure\CMH.MobileHomeTracker.Infrastructure.csproj" />
+    <ProjectReference Include="..\CMH.Template.Tests.Shared\CMH.MobileHomeTracker.Tests.Shared.csproj" />
+  </ItemGroup>
+
+</Project>

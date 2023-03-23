@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CMH.Common.RabbitMQClient" Version="1.1.0.122" />
+    <PackageReference Include="Cmh.Vmf.Infrastructure.Common" Version="1.1.5.92" />
+    <PackageReference Include="System.Configuration.ConfigurationManager" Version="5.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Api\CMH.Template.Dto\CMH.MobileHomeTracker.Dto.csproj" />
+    <ProjectReference Include="..\..\Core\CMH.Template.Domain\CMH.MobileHomeTracker.Domain.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Dapper.Contrib" Version="2.0.78" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Core\CMH.Template.Domain\CMH.MobileHomeTracker.Domain.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\CMH.Template.Data\CMH.MobileHomeTracker.Data.csproj" />
+  </ItemGroup>
+
+</Project>

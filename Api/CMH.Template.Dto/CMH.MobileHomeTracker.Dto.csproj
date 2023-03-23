@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <VersionPrefix>1.0.0</VersionPrefix>
+    <Authors>Author or team name</Authors>
+    <Company>Clayton Homes</Company>
+    <Description>Describe your api here</Description>
+    <Copyright>Copyright ©2021 Clayton Homes</Copyright>
+    <RepositoryUrl>https://git.clayton.net/projecturl</RepositoryUrl>
+    <RepositoryType>BitBucket</RepositoryType>
+    <PackageReleaseNotes>Initial implementation</PackageReleaseNotes>
+    <Platforms>AnyCPU;x64</Platforms>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Cmh.Vmf.Infrastructure.AspNet" Version="1.1.5.92" />
+  </ItemGroup>
+</Project>

@@ -1,0 +1,32 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <IsPackable>false</IsPackable>
+    <Platforms>AnyCPU;x64</Platforms>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Cmh.Vmf.Infrastructure.Testing" Version="1.1.5.92" />
+    <PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="5.2.7" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="3.1.13" />
+    <PackageReference Include="NUnit3TestAdapter" Version="3.17.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.9.4" />
+    <PackageReference Include="FakeItEasy" Version="7.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Api\CMH.Template.Api.Client\CMH.MobileHomeTracker.Api.Client.csproj" />
+    <ProjectReference Include="..\..\Api\CMH.Template.Api\CMH.MobileHomeTracker.Api.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\CMH.Template.Adapters\CMH.MobileHomeTracker.Adapters.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\CMH.Template.Data\CMH.MobileHomeTracker.Data.csproj" />
+    <ProjectReference Include="..\CMH.Template.Tests.Shared\CMH.MobileHomeTracker.Tests.Shared.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="appsettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>

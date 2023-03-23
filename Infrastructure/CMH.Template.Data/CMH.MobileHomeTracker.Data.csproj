@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <Platforms>AnyCPU;x64</Platforms>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Cmh.Vmf.Infrastructure.Data" Version="1.1.5.92" />
+    <PackageReference Include="Dapper.Contrib" Version="2.0.78" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Core\CMH.Template.Domain\CMH.MobileHomeTracker.Domain.csproj" />
+    <ProjectReference Include="..\CMH.Template.Infrastructure\CMH.MobileHomeTracker.Infrastructure.csproj" />
+  </ItemGroup>
+
+</Project>
