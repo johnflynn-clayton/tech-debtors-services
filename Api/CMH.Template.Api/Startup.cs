@@ -12,12 +12,17 @@ using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Hosting;
+using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerUI;
 using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Reflection;
 
 namespace CMH.MobileHomeTracker.Api
 {
@@ -43,9 +48,59 @@ namespace CMH.MobileHomeTracker.Api
                 .AddSqlConnection("MobileHomeTracker", TimeSpan.FromSeconds(1), HealthStatus.Unhealthy, Configuration["ConnectionStrings:MobileHomeTracker"]);
 
             services
-                .AddOptions();
+                .AddOptions()
+                .Configure<AuthorizationSettings>(r => Configuration.GetSection(nameof(AuthorizationSettings)).Bind(r));
 
-            services.AddSwagger(WebHostEnvironment.IsProduction());
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo
+                {
+                    Title = "CMH.MobileHomeTracker Domain",
+                    Description = "Domain used for Tracking Mobile Homes",
+                    Version = Assembly.GetExecutingAssembly().GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion
+                });
+
+                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+
+                c.IncludeXmlComments(xmlPath);
+                c.DocumentFilter<SwaggerLivenessDocumentFilter>();
+                c.DocumentFilter<SwaggerReadinessDocumentFilter>();
+
+                // Don't include configuration of tokens in production
+                if (!WebHostEnvironment.IsProduction())
+                {
+                    // Add ability to paste in a token and use it in swagger
+                    // Note: User must prefix token manually: "Bearer {{token}}"
+                    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
+                    {
+                        In = ParameterLocation.Header,
+                        Scheme = "Bearer",
+                        BearerFormat = "JWT",
+                        Description = "Add your token with the Bearer prefix",
+                        Name = "Authorization",
+                        Type = SecuritySchemeType.ApiKey
+                    });
+
+                    c.AddSecurityRequirement(new OpenApiSecurityRequirement()
+                    {
+                        {
+                            new OpenApiSecurityScheme
+                            {
+                                Reference = new OpenApiReference
+                                {
+                                    Type = ReferenceType.SecurityScheme,
+                                    Id = "Bearer"
+                                },
+                                Scheme = "oauth2",
+                                Name = "Bearer",
+                                In = ParameterLocation.Header,
+                            },
+                            new List<string>()
+                        }
+                    });
+                }
+            });
 
             services.AddControllers();
 
@@ -86,7 +141,7 @@ namespace CMH.MobileHomeTracker.Api
             app.UseSwaggerUI(c =>
             {
                 //Using a relative path to allow Swagger to work in both IIS Express and Local IIS
-                c.SwaggerEndpoint("v1/swagger.json", "Template Domain V1");
+                c.SwaggerEndpoint("v1/swagger.json", "Mobile Home Tracker Domain V1");
 
                 // Disable "Try it out" in production
                 if (WebHostEnvironment.IsProduction())
@@ -100,7 +155,19 @@ namespace CMH.MobileHomeTracker.Api
             app.UseWhen(x => !x.Request.Path.StartsWithSegments("/health"), mvcBuilder =>
             {
                 mvcBuilder.UseActivityTraceLogging();
-                mvcBuilder.UseExceptionMiddleware();
+                mvcBuilder.UseExceptionMiddleware((ex, details, logger) =>
+                {
+                    switch (ex)
+                    {
+                        case KeyNotFoundException _:
+                            details.StatusCode = StatusCodes.Status400BadRequest;
+                            break;
+                        case System.Data.SqlClient.SqlException _:
+                            details.StatusCode = StatusCodes.Status400BadRequest;
+                            details.Message = ex.Message;
+                            break;
+                    }
+                });
             });
 
             // Add any additional middleware after this point
