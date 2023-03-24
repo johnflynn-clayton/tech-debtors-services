@@ -5,6 +5,6 @@ namespace CMH.MobileHomeTracker.Dto
 {
     public class Home : DtoBase<Guid>
     {
-        public string Model { get; set; }
+        public string Name { get; set; }
     }
 }

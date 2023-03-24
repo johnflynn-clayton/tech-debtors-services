@@ -1,6 +1,6 @@
 USE [master]
 GO
-/****** Object:  Database [MobileHomeTracker]    Script Date: 3/23/2023 2:53:35 PM ******/
+/****** Object:  Database [MobileHomeTracker]    Script Date: 3/24/2023 11:09:05 AM ******/
 CREATE DATABASE [MobileHomeTracker]
  CONTAINMENT = NONE
  ON  PRIMARY 
@@ -82,7 +82,7 @@ ALTER DATABASE [MobileHomeTracker] SET QUERY_STORE = OFF
 GO
 USE [MobileHomeTracker]
 GO
-/****** Object:  Table [dbo].[Home]    Script Date: 3/23/2023 2:53:35 PM ******/
+/****** Object:  Table [dbo].[Home]    Script Date: 3/24/2023 11:09:06 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -96,7 +96,7 @@ CREATE TABLE [dbo].[Home](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[LocationRecord]    Script Date: 3/23/2023 2:53:35 PM ******/
+/****** Object:  Table [dbo].[LocationRecord]    Script Date: 3/24/2023 11:09:06 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -117,6 +117,221 @@ ALTER TABLE [dbo].[LocationRecord]  WITH CHECK ADD  CONSTRAINT [FK_LocationRecor
 REFERENCES [dbo].[Home] ([ID])
 GO
 ALTER TABLE [dbo].[LocationRecord] CHECK CONSTRAINT [FK_LocationRecords_Homes]
+GO
+/****** Object:  StoredProcedure [dbo].[usp_Home_Delete]    Script Date: 3/24/2023 11:09:06 AM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[usp_Home_Delete](
+    @ID uniqueidentifier
+)
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    Delete from dbo.Home
+    Where ID = @ID
+END
+GO
+/****** Object:  StoredProcedure [dbo].[usp_Home_GetAll]    Script Date: 3/24/2023 11:09:06 AM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+-- =============================================
+-- Author:		<Author,,Name>
+-- Create date: <Create Date,,>
+-- Description:	<Description,,>
+-- =============================================
+CREATE PROCEDURE [dbo].[usp_Home_GetAll] 
+AS
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+    -- Insert statements for procedure here
+	SELECT * from dbo.Home
+END
+GO
+/****** Object:  StoredProcedure [dbo].[usp_Home_GetById]    Script Date: 3/24/2023 11:09:06 AM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+-- =============================================
+-- Author:		<Author,,Name>
+-- Create date: <Create Date,,>
+-- Description:	<Description,,>
+-- =============================================
+CREATE PROCEDURE [dbo].[usp_Home_GetById](
+    @Id uniqueidentifier
+)
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    SELECT * FROM dbo.Home
+    WHERE id = @id
+END
+GO
+/****** Object:  StoredProcedure [dbo].[usp_Home_Insert]    Script Date: 3/24/2023 11:09:06 AM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[usp_Home_Insert] (
+    @Id uniqueidentifier, 
+    @Name varchar(100)
+)
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    INSERT INTO dbo.Home (
+        Id,
+        [Name]
+    ) VALUES (
+        @Id,
+        @Name
+    );
+END
+GO
+/****** Object:  StoredProcedure [dbo].[usp_Home_Update]    Script Date: 3/24/2023 11:09:06 AM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[usp_Home_Update](
+    @ID uniqueidentifier,
+    @Name varchar(100)
+)
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    Update dbo.Home 
+    Set		
+        [Name] = @Name
+    Where ID = @ID
+END
+GO
+/****** Object:  StoredProcedure [dbo].[usp_LocationRecord_Delete]    Script Date: 3/24/2023 11:09:06 AM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[usp_LocationRecord_Delete](
+    @ID uniqueidentifier
+)
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    Delete from dbo.LocationRedord
+    Where ID = @ID
+END
+GO
+/****** Object:  StoredProcedure [dbo].[usp_LocationRecord_GetAll]    Script Date: 3/24/2023 11:09:06 AM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+-- =============================================
+-- Author:		<Author,,Name>
+-- Create date: <Create Date,,>
+-- Description:	<Description,,>
+-- =============================================
+CREATE PROCEDURE [dbo].[usp_LocationRecord_GetAll] 
+AS
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+    -- Insert statements for procedure here
+	SELECT * from dbo.LocationRecord
+END
+GO
+/****** Object:  StoredProcedure [dbo].[usp_LocationRecord_GetById]    Script Date: 3/24/2023 11:09:06 AM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+-- =============================================
+-- Author:		<Author,,Name>
+-- Create date: <Create Date,,>
+-- Description:	<Description,,>
+-- =============================================
+CREATE PROCEDURE [dbo].[usp_LocationRecord_GetById](
+    @Id uniqueidentifier
+)
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    SELECT * FROM dbo.LocationRecord
+    WHERE id = @id
+END
+GO
+/****** Object:  StoredProcedure [dbo].[usp_LocationRecord_Insert]    Script Date: 3/24/2023 11:09:06 AM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[usp_LocationRecord_Insert] (
+    @ID uniqueidentifier, 
+    @HomeID varchar(100),
+	@Latitude float,
+	@Longitude float,
+	@RecordDate datetime
+)
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    INSERT INTO dbo.LocationRecord (
+        ID,
+        HomeID,
+		Latitude,
+		Longitude,
+		RecordDate
+    ) VALUES (
+        @ID,
+        @HomeID,
+		@Latitude,
+		@Longitude,
+		@RecordDate
+    );
+END
+GO
+/****** Object:  StoredProcedure [dbo].[usp_LocationRecord_Update]    Script Date: 3/24/2023 11:09:06 AM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[usp_LocationRecord_Update](
+    @ID uniqueidentifier,
+    @HomeID uniqueidentifier,
+	@Longitude float,
+	@Latitude float,
+	@RecordDate datetime
+)
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    Update dbo.LocationRecord
+    Set		
+        Longitude = @Longitude,
+		Latitude = @Latitude,
+		RecordDate = @RecordDate
+    Where ID = @ID
+END
 GO
 USE [master]
 GO

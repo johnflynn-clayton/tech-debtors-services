@@ -5,6 +5,6 @@ namespace CMH.MobileHomeTracker.Domain.Models
 {
     public class Home : DomainModel<Guid>
     {
-        public string Model { get; set; }
+        public string Name { get; set; }
     }
 }

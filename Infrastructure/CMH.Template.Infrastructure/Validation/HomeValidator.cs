@@ -6,7 +6,7 @@ namespace CMH.MobileHomeTracker.Infrastructure.Validation
     {
         public HomeValidator()
         {
-            RuleFor(r => r.Model)
+            RuleFor(r => r.Name)
                 .NotEmpty()
                 .MaximumLength(100)
                 .NoInvalidCharacters();
