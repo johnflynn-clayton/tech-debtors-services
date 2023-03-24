@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System;
+using Cmh.Vmf.Infrastructure.AspNet.Extensions;
 
 namespace CMH.MobileHomeTracker.Api
 {
@@ -72,6 +73,34 @@ namespace CMH.MobileHomeTracker.Api
                     });
                 }
             });
+        }
+    }
+
+    /// <summary>
+    /// Helper methods for configuring adapters
+    /// </summary>
+    public static class AdapterExtensions
+    {
+        /// <summary>
+        /// Uses reflection to find all adapters in the assembly containing T and registers them with the specified lifetime
+        /// </summary>
+        /// <remarks>
+        /// Each adapter must be named with the Adapter suffix and it must implement an interface with the same name and I as a prefix
+        /// </remarks>
+        public static IServiceCollection AddAdaptersFromAssemblyContaining<T>(this IServiceCollection services, ServiceLifetime lifetime = ServiceLifetime.Singleton)
+        {
+            return services.AddAdaptersFromAssemblyContaining<T>((service, i) => i.Name == $"I{service.Name}", lifetime);
+        }
+
+        /// <summary>
+        /// Uses reflection to find all adapters in the assembly containing T and registers them with the specified lifetime
+        /// </summary>
+        /// <remarks>
+        /// This overload allows the caller to specify the predicate used in the search for the interface that implements an adapter
+        /// </remarks>
+        public static IServiceCollection AddAdaptersFromAssemblyContaining<T>(this IServiceCollection services, Func<System.Type, System.Type, bool> predicate, ServiceLifetime lifetime = ServiceLifetime.Singleton)
+        {
+            return services.AddServicesFromAssemblyContaining<T>(r => r.Name.EndsWith("Adapter"), predicate, lifetime);
         }
     }
 }

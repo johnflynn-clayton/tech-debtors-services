@@ -19,11 +19,13 @@ namespace CMH.MobileHomeTracker.Api.Controllers
     {
         private readonly IHomeService _service;
         private readonly HomeMapper _mapper;
+        public readonly LocationRecordMapper _locationMapper;
 
-        public HomeController(IHomeService service, HomeMapper mapper)
+        public HomeController(IHomeService service, HomeMapper mapper, LocationRecordMapper locationMapper)
         {
             _service = service;
             _mapper = mapper;
+            _locationMapper = locationMapper;
         }
 
         [HttpGet]
@@ -85,6 +87,20 @@ namespace CMH.MobileHomeTracker.Api.Controllers
             await _service.DeleteAsync(parsedId);
 
             return NoContent();
+        }
+
+        [HttpGet("location/{id}")]
+        [ProducesResponseType(typeof(Dto.LocationRecord), 200)]
+        [ProducesResponseType(typeof(Cmh.Vmf.Infrastructure.AspNet.Dto.ErrorDetails), 400)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(Cmh.Vmf.Infrastructure.AspNet.Dto.ErrorDetails), 404)]
+        public async Task<IActionResult> GetHomeLocation(string id)
+        {
+            var parseId = ParseGuid(id);
+
+            var model = await _service.GetCurrentLocationForHomeId(parseId);
+
+            return Ok(_locationMapper.Map(model));
         }
     }
 }

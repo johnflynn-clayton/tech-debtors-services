@@ -118,6 +118,7 @@ namespace CMH.MobileHomeTracker.Api
 
             services.AddSingleton<IIdGenerator<Guid>, GuidIdGenerator>();
             services.AddDbConnectionFactory(Configuration.GetConnectionString("MobileHomeTracker"));
+            services.AddAdaptersFromAssemblyContaining<Adapters.GitHubAdapter>();
 
             services.AddLogging();
 

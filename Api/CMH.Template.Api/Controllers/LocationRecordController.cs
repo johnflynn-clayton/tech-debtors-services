@@ -37,7 +37,7 @@ namespace CMH.MobileHomeTracker.Api.Controllers
         }
 
         [HttpGet("{id}")]
-        [ProducesResponseType(typeof(Dto.Home), 200)]
+        [ProducesResponseType(typeof(Dto.LocationRecord), 200)]
         [ProducesResponseType(typeof(Cmh.Vmf.Infrastructure.AspNet.Dto.ErrorDetails), 400)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(Cmh.Vmf.Infrastructure.AspNet.Dto.ErrorDetails), 404)]
@@ -50,7 +50,7 @@ namespace CMH.MobileHomeTracker.Api.Controllers
         }
 
         [HttpPost]
-        [ProducesResponseType(typeof(Dto.Home), 201)]
+        [ProducesResponseType(typeof(Dto.LocationRecord), 201)]
         [ProducesResponseType(typeof(Cmh.Vmf.Infrastructure.AspNet.Dto.ErrorDetails), 400)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> InsertAsync(Dto.LocationRecord dto)
@@ -85,6 +85,19 @@ namespace CMH.MobileHomeTracker.Api.Controllers
             await _service.DeleteAsync(parsedId);
 
             return NoContent();
+        }
+
+        [HttpGet("home/{id}")]
+        [ProducesResponseType(typeof(Dto.LocationRecord), 200)]
+        [ProducesResponseType(typeof(Cmh.Vmf.Infrastructure.AspNet.Dto.ErrorDetails), 400)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(Cmh.Vmf.Infrastructure.AspNet.Dto.ErrorDetails), 404)]
+        public async Task<IActionResult> GetLocationForHomeIdAsync(string id)
+        {
+            var parsedId = ParseGuid(id);
+            var model = await _service.GetLocationForHomeId(parsedId);
+
+            return Ok(_mapper.Map(model));
         }
     }
 }

@@ -6,20 +6,31 @@ using CMH.MobileHomeTracker.Domain.Repositories;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Threading.Tasks;
+using CMH.MobileHomeTracker.Domain.Adapters;
 
 namespace CMH.MobileHomeTracker.Domain.Services
 {
     public interface ILocationRecordService : IDomainService<Models.LocationRecord, Guid>
     {
+        Task<Models.LocationRecord> GetLocationForHomeId(Guid homeId);
     }
 
     public class LocationRecordService : DomainService<Models.LocationRecord, Guid>, ILocationRecordService
     {
         private readonly ILogger _logger;
+        private readonly IGitHubAdapter _gitHubAdapter;
+        private readonly ILocationRecordRepository _repository;
+        private readonly IIdGenerator<Guid> _idGenerator;
 
-        public LocationRecordService(ILogger<LocationRecordService> logger, IIdGenerator<Guid> idGenerator, ILocationRecordRepository repository) : base(idGenerator, repository)
+        public LocationRecordService(ILogger<LocationRecordService> logger, 
+            IIdGenerator<Guid> idGenerator, 
+            ILocationRecordRepository repository,
+            IGitHubAdapter gitHubAdapter) : base(idGenerator, repository)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _gitHubAdapter = gitHubAdapter ?? throw new ArgumentNullException(nameof(gitHubAdapter));
+            _repository = repository ?? throw new ArgumentNullException(nameof(repository));
+            _idGenerator = idGenerator;
         }
 
         public override async Task<LocationRecord> CreateAsync(LocationRecord model)
@@ -50,6 +61,35 @@ namespace CMH.MobileHomeTracker.Domain.Services
         public override async Task<Models.LocationRecord> GetAsync(Guid id)
         {
             return await base.GetAsync(id);
+        }
+
+        public async Task<Models.LocationRecord> GetLocationForHomeId(Guid homeId)
+        {
+            var location = await _gitHubAdapter.GetLocationDataForId(homeId);
+            var ret = new Models.LocationRecord
+            {
+                Latitude = location.Latitude,
+                Longitude = location.Longitude,
+                RecordDate = location.Date,
+                HomeID = homeId
+            };
+
+            var dbLocation = await _repository.GetLocationForHomeId(homeId);
+
+            if (dbLocation == null || location.Date > dbLocation.RecordDate)
+            {
+                var record = new Models.LocationRecord();
+
+                record.Longitude = location.Longitude;
+                record.Latitude = location.Latitude;
+                record.RecordDate = location.Date;
+                record.HomeID = homeId;
+                record.Id = _idGenerator.GetNextId();
+
+                await base.CreateAsync(record);
+            }
+
+            return ret;
         }
     }
 }
